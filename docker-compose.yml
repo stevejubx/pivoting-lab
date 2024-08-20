@@ -23,8 +23,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: target3
-    stdin_open: true
-    tty: true
     extra_hosts:
       - "jumphost:172.16.101.11"
     networks:
@@ -36,8 +34,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: target1
-    stdin_open: true
-    tty: true
     extra_hosts:
       - "jumphost:172.16.101.11"
       - "target3:172.16.101.21"
@@ -50,8 +46,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: target2
-    stdin_open: true
-    tty: true
     extra_hosts:
       - "jumphost:172.16.101.11"
       - "target2:172.16.101.20"
