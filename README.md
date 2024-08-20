@@ -1,6 +1,8 @@
 # Docker Compose Pivoting Lab Setup
 This repository provides a Docker Compose configuration for a pivoting lab.
 
+Note: This repository doesn't have security hardening, so you'll need to modify the Dockerfile and docker-compose.yml yourself.
+
 ## Components
 
 - **Jump Host**: Ubunto container used for penetration testing.
