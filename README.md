@@ -3,7 +3,7 @@ This repository provides a Docker Compose configuration for a pivoting lab.
 
 ## Components
 
-- **Jumphost**: Ubunto container used for penetration testing.
+- **Jump Host**: Ubunto container used for penetration testing.
 - **3 Targets**: 3 Ubuntu containers within the internal networks (Subnet A-B).
 
 ## Network Configuration
