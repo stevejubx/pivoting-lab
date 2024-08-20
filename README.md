@@ -37,4 +37,11 @@ The Docker Compose setup uses a custom network with the following subnet:
    $ docker-compose -f subnet.yml -f docker-compose.yml build
    $ docker-compose -f subnet.yml -f docker-compose.yml up
    ```
+2. **SSH Jump Host**
+
+   ```bash
+   $ ssh -p 2222 root@localhost
+
+   ### Default Password: 12345678 ##
+   ```
 
