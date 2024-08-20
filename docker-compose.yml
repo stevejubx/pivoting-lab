@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  jumphost:
+    build: .
+    container_name: jumphost
+    ports:
+      - "2222:22"
+    stdin_open: true
+    tty: true
+    extra_hosts:
+      - "target1:172.16.101.20"
+      - "target2:172.16.101.21"
+      - "target3:172.16.100.10"
+    networks:
+      a:
+        ipv4_address: 172.16.100.11
+      b:
+        ipv4_address: 172.16.101.11
+
+  target1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: target3
+    stdin_open: true
+    tty: true
+    extra_hosts:
+      - "jumphost:172.16.101.11"
+    networks:
+      a:
+        ipv4_address: 172.16.100.10
+        
+  target2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: target1
+    stdin_open: true
+    tty: true
+    extra_hosts:
+      - "jumphost:172.16.101.11"
+      - "target3:172.16.101.21"
+    networks:
+      b:
+        ipv4_address: 172.16.101.20
+
+  target3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: target2
+    stdin_open: true
+    tty: true
+    extra_hosts:
+      - "jumphost:172.16.101.11"
+      - "target2:172.16.101.20"
+    networks:
+      b:
+        ipv4_address: 172.16.101.21
+
