@@ -34,7 +34,7 @@ The Docker Compose setup uses a custom network with the following subnet:
 2. **Build and Start the Containers**
 
    ```bash
-   $ docker-compose -f docker-compose-subnet.yml -f docker-compose.yml build
-   $ docker-compose -f docker-compose-subnet.yml -f docker-compose.yml up
+   $ docker-compose -f subnet.yml -f docker-compose.yml build
+   $ docker-compose -f subnet.yml -f docker-compose.yml up
    ```
 
