@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   jumphost:
     build: .
@@ -9,9 +7,9 @@ services:
     stdin_open: true
     tty: true
     extra_hosts:
-      - "target1:172.16.101.20"
-      - "target2:172.16.101.21"
-      - "target3:172.16.100.10"
+      - "target1:172.16.100.10"
+      - "target2:72.16.101.20"
+      - "target3:172.16.101.21"
     networks:
       a:
         ipv4_address: 172.16.100.11
@@ -19,21 +17,61 @@ services:
         ipv4_address: 172.16.101.11
 
   target1:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: target3
+    image: bkimminich/juice-shop
+    container_name: target1
     extra_hosts:
       - "jumphost:172.16.101.11"
     networks:
       a:
         ipv4_address: 172.16.100.10
-        
+
   target2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: target1
+    image: ssrd/securebank
+    environment:
+      - AppSettings:BaseUrl=http://172.16.101.20:80
+      - AppSettings:Ctf:Enabled=true
+      - AppSettings:Ctf:Seed=example
+      - AppSettings:Ctf:GenerateCtfdExport=false
+      - AppSettings:Ctf:FlagFormat=ctf{{{0}}}
+      - AppSettings:Ctf:UseRealChallengeName=true
+      - AppSettings:Ctf:Challenges:SqlInjection=true
+      - AppSettings:Ctf:Challenges:WeakPassword=true
+      - AppSettings:Ctf:Challenges:SensitiveDataExposureStore=true
+      - AppSettings:Ctf:Challenges:SensitiveDataExposureBalance=true
+      - AppSettings:Ctf:Challenges:SensitiveDataExposureProfileImage=true
+      - AppSettings:Ctf:Challenges:PathTraversal=true
+      - AppSettings:Ctf:Challenges:Enumeration=true
+      - AppSettings:Ctf:Challenges:XxeInjection=true
+      - AppSettings:Ctf:Challenges:MissingAuthentication=true
+      - AppSettings:Ctf:Challenges:RegistrationRoleSet=true
+      - AppSettings:Ctf:Challenges:ChangeRoleInCookie=true
+      - AppSettings:Ctf:Challenges:UnconfirmedLogin=true
+      - AppSettings:Ctf:Challenges:ExceptionHandlingTransactionCreate=true
+      - AppSettings:Ctf:Challenges:ExceptionHandlingTransactionUpload=true
+      - AppSettings:Ctf:Challenges:TableXss=true
+      - AppSettings:Ctf:Challenges:PortalSearchXss=true
+      - AppSettings:Ctf:Challenges:InvalidModelStore=true
+      - AppSettings:Ctf:Challenges:InvalidModelTransaction=true
+      - AppSettings:Ctf:Challenges:UnknownGeneration=true
+      - AppSettings:Ctf:Challenges:HiddenPageRegisterAdmin=true
+      - AppSettings:Ctf:Challenges:HiddenPageLoginAdmin=true
+      - AppSettings:Ctf:Challenges:InvalidRedirect=true
+      - AppSettings:Ctf:Challenges:DirectoryBrowsing=true
+      - AppSettings:Ctf:Challenges:Swagger=true
+      - AppSettings:Ctf:Challenges:Base2048Content=true
+      - AppSettings:Ctf:Challenges:SimultaneousRequest=true
+      - AppSettings:Ctf:Challenges:reDOS=true
+      - AppSettings:Ctf:Challenges:FreeCredit=true
+      - SeedingSettings:Seed=true
+      - SeedingSettings:Admin=admin@ssrd.io
+      - SeedingSettings:AdminPassword=admin
+      - SeedingSettings:UserPassword=test
+    volumes:
+      - ./logs/securebank:/app/SecureBank/logs
+      - ./logs/storeapi:/app/StoreApi/logs
+      - ./ctf:/SecureBank/Ctf
+      - ./data:/var/opt/mssql/data
+    container_name: target2
     extra_hosts:
       - "jumphost:172.16.101.11"
       - "target3:172.16.101.21"
@@ -45,11 +83,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: target2
+    container_name: target3
     extra_hosts:
       - "jumphost:172.16.101.11"
       - "target2:172.16.101.20"
     networks:
       b:
         ipv4_address: 172.16.101.21
-
